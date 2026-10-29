@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bir kun - bir hikoya</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css"></head>
+<body>
+<div id="page-transition"></div>
+<nav class="navbar"><div class="container nav-inner">
+<a class="logo" href="/" data-link>📖 Bir kun — bir hikoya</a>
+<div class="nav-links">
+<a href="/" data-link>📖 Bugungi</a>
+<a href="/kutubxona" data-link>📚 Kutubxona</a>
+<a href="/yuborish" data-link>✍ Yuborish</a>
+<a href="/sevimlilar" data-link>⭐ Sevimlilar</a>
+<button id="themeToggle" class="theme-btn">🌙</button>
+</div></div></nav>
+<main class="container page-animate" id="main-content">
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for cat, msg in messages %}<div class="flash {{cat}}">{{msg}}</div>{% endfor %}{% endif %}{% endwith %}
+{% block content %}{% endblock %}
+</main>
+<footer>© 2026 • Admin: @brainn_hr • Har bir hikoyada rasm</footer>
+<script>
+const btn=document.getElementById('themeToggle');
+const saved=localStorage.getItem('theme')||'dark';
+document.documentElement.setAttribute('data-theme',saved);
+btn.innerText=saved==='dark'?'☀️':'🌙';
+btn.addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  btn.innerText=next==='dark'?'☀️':'🌙';
+});
+</script>
+</body></html>

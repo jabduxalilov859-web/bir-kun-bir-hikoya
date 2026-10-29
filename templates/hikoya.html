@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block content %}
+<article class="story-full"><div class="meta">{{story.date}} • {{story.category}} • {{story.author_name or 'Anonim'}}</div>
+<h1>{{story.title}}</h1><p class="summary big">{{story.summary}}</p>
+<div class="content">{{story.content}}</div>
+<div class="actions"><button class="btn" onclick="toggleFav({{story.id}})">⭐ Sevimlilarga qoshish</button>
+<a class="btn ghost" href="/kutubxona">📚 Kutubxonaga</a></div></article>
+{% endblock %}

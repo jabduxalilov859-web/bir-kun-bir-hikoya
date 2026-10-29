@@ -1,0 +1,53 @@
+{% extends 'base.html' %}{% block content %}
+<style>
+.hero{padding:48px 0 24px;max-width:620px;margin:0 auto}
+.kicker{display:inline-flex;background:#141416;border:1px solid #232326;padding:6px 12px;border-radius:100px;font-size:11px;font-weight:700;color:#9aa0a6;margin-bottom:16px;letter-spacing:.5px}
+.h-title{font-family:'Instrument Serif',Instrument Serif,serif;font-size:56px;letter-spacing:-2px;line-height:.9;margin:0;color:#f5f5f5}
+.h-title em{font-style:italic;color:#9aa0a6;font-weight:400}
+.h-sub{font-size:15px;color:#9aa0a6;line-height:1.5;margin-top:12px;max-width:480px}
+.feed{max-width:620px;margin:32px auto 0;display:flex;flex-direction:column;gap:20px}
+.post{background:#141416;border:1px solid #232326;border-radius:20px;overflow:hidden;transition:.25s}
+.post:hover{border-color:#f5f5f5;transform:translateY(-2px)}
+.post-img{width:100%;height:360px;background-size:cover;background-position:center;background-color:#0f0f10;display:block}
+.post-body{padding:16px 20px}
+.meta{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#9aa0a6;margin-bottom:8px}
+.title{font-size:22px;font-weight:800;letter-spacing:-.5px;margin:0 0 6px;line-height:1.1;color:#f5f5f5}
+.title a{color:#f5f5f5;text-decoration:none}
+.sum{font-size:14px;color:#9aa0a6;line-height:1.5;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pill{padding:10px 18px;border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.2s;cursor:pointer}
+.pill-primary{background:#f5f5f5;color:#070708;border:1px solid #f5f5f5}
+.pill-primary:hover{opacity:.85}
+.pill-ghost{background:transparent;border:1px solid #232326;color:#f5f5f5;margin-left:8px}
+.pill-ghost:hover{border-color:#f5f5f5}
+.empty{max-width:620px;margin:32px auto;text-align:center;padding:48px;color:#9aa0a6;border:1px dashed #232326;border-radius:20px;background:#141416}
+@media(max-width:700px){.h-title{font-size:38px}.post-img{height:280px}.hero{padding:32px 16px 20px}.feed{padding:0 12px}}
+</style>
+
+<div class="hero">
+<div class="kicker">● Har kuni soat 09:00 da yangi hikoya</div>
+<h1 class="h-title">Bugungi <em>hikoya</em></h1>
+<p class="h-sub">Har kuni bitta hikoya, bitta saboq. @brainn_hr tomonidan.</p>
+</div>
+
+<div class="feed">
+{% for s in stories %}
+{% set img_url = s.image_url if s.image_url and s.image_url|length > 10 else 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800' %}
+<div class="post">
+<div class="post-img" style="background-image:url('{{img_url}}')"></div>
+<div class="post-body">
+<div class="meta">{{s.date}} • {{s.category|upper if s.category else 'HAYOTIY'}}</div>
+<h2 class="title"><a href="/hikoya/{{s.id}}">{{s.title}}</a></h2>
+<div class="sum">{{s.summary if s.summary else s.content[:140]}}...</div>
+<div>
+<a href="/hikoya/{{s.id}}" class="pill pill-primary">To'liq o'qish →</a>
+<button class="pill pill-ghost" onclick="toggleFav({{s.id}});this.innerText='⭐ Saqlandi'">⭐ Sevimli</button>
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+
+{% if not stories %}
+<div class="empty">Hozircha e'lon qilingan hikoya yo'q. Admin paneldan qo'shing va "Darhol e'lon qilish" ni belgilang.</div>
+{% endif %}
+{% endblock %}

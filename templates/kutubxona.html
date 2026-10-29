@@ -1,0 +1,45 @@
+{% extends 'base.html' %}{% block content %}
+<style>
+.k-header{padding:60px 0 28px}
+.k-title{font-size:48px;font-weight:800;letter-spacing:-1.5px;line-height:.95;margin:0}
+.k-sub{color:var(--muted);font-size:16px;margin-top:12px}
+.k-filters{display:flex;gap:12px;margin:32px 0;background:var(--card);border:1px solid var(--border);padding:14px;border-radius:16px}
+.k-filters input,.k-filters select{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:12px;font-size:14px}
+.k-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.k-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:.3s}
+.k-card:hover{border-color:var(--text);transform:translateY(-4px)}
+.k-card img{width:100%;height:200px;object-fit:cover}
+.k-body{padding:22px}
+.k-meta{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:10px;display:flex;gap:8px}
+.k-body h3{font-size:20px;line-height:1.2;letter-spacing:-.5px;margin:0 0 10px}
+.k-body h3 a{color:var(--text);text-decoration:none}
+.k-body p{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 16px}
+.k-btn{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.k-btn:hover{border-color:var(--text)}
+</style>
+
+<div class="k-header">
+<h1 class="k-title">Kutubxona</h1>
+<p class="k-sub">Barcha hikoyalar — rasm bilan, tartibli, uzun. Qidiruv va kategoriya bo'yicha filter.</p>
+</div>
+
+<form class="k-filters" method="get">
+<input type="text" name="q" placeholder="Qidirish — sarlavha, matn..." value="{{q}}">
+<select name="cat"><option value="">Barcha kategoriyalar</option>{% for c in categories %}<option value="{{c}}" {% if selected_cat==c %}selected{% endif %}>{{c|title}}</option>{% endfor %}</select>
+<button class="k-btn" style="background:var(--text);color:var(--bg);border-color:var(--text)">Qidirish →</button>
+</form>
+
+<div class="k-grid">
+{% for s in stories %}
+<div class="k-card">
+<img src="{{s.image_url or 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800'}}">
+<div class="k-body">
+<div class="k-meta"><span>{{s.date}}</span> • <span>{{s.category}}</span></div>
+<h3><a href="/hikoya/{{s.id}}">{{s.title}}</a></h3>
+<p>{{s.summary}}</p>
+<button class="k-btn" onclick="toggleFav({{s.id}})">⭐ Sevimli</button>
+</div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

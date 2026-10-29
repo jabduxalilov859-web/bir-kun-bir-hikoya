@@ -1,0 +1,46 @@
+{% extends 'base.html' %}{% block content %}
+<style>
+.yuborish-wrap{max-width:720px;margin:0 auto;padding:40px 0 80px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:#141416;border:1px solid #232326;padding:6px 12px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.4px;color:#9aa0a6;margin-bottom:24px}
+.y-title{font-family:'Instrument Serif',serif;font-size:48px;font-weight:400;letter-spacing:-1.5px;line-height:.95;margin:0 0 12px}
+.y-sub{color:#9aa0a6;font-size:17px;line-height:1.5;margin-bottom:40px}
+.field{margin-bottom:22px}
+.field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9aa0a6;margin-bottom:10px}
+.field input,.field textarea{width:100%;background:#141416;border:1px solid #232326;border-radius:14px;padding:16px 18px;color:#f5f5f5;font-size:15px;font-family:Manrope,sans-serif;transition:.2s;outline:none}
+.field input:focus,.field textarea:focus{border-color:#f5f5f5;box-shadow:0 0 0 4px rgba(255,255,255,.06);transform:scale(1.005)}
+.field textarea{font-family:Merriweather,serif;font-size:19px;line-height:2;min-height:340px}
+.img-preview{margin-top:12px;border-radius:14px;overflow:hidden;border:1px solid #232326;height:220px;background:#141416;position:relative}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+.img-preview::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4),transparent)}
+.submit-btn{width:100%;background:#f5f5f5;color:#070708;border:none;border-radius:100px;padding:18px;font-size:15px;font-weight:700;letter-spacing:.2px;cursor:pointer;transition:.2s;margin-top:12px}
+.submit-btn:hover{background:#e8e8e3;transform:translateY(-1px)}
+.side-note{margin-top:32px;padding:16px 18px;background:#141416;border:1px solid #232326;border-radius:14px;color:#9aa0a6;font-size:13px;line-height:1.6}
+</style>
+
+<div class="yuborish-wrap">
+<div class="badge">● Yangi hikoya — @brainn_hr ga boradi</div>
+<h1 class="y-title">Hikoyangizni<br>yuboring</h1>
+<p class="y-sub">Uzun, mazmunli, rasmli hikoya. Qisqa matnlar qabul qilinmaydi. Har biri moderatsiyadan o'tadi.</p>
+
+<form method="post">
+<div class="field"><label>Sarlavha</label><input type="text" name="title" placeholder="Masalan — Bugungi kunning qadri" required></div>
+
+<div class="field"><label>Rasm — har bir hikoyada majburiy</label><input type="url" name="image_url" id="imgInput" placeholder="https://images.unsplash.com/photo-..." oninput="document.getElementById('prev').src=this.value"><div class="img-preview"><img id="prev" src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=1200"></div></div>
+
+<div class="field"><label>Hikoya matni — uzun bo'lsin</label><textarea name="content" placeholder="Bu yerga hikoyangizni yozing. Kamida 3-4 paragraf, to'liq ma'no bilan..." required></textarea></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="field"><label>Muallif</label><input type="text" name="author_name" placeholder="Ism / taxallus"></div>
+<div class="field"><label>Telegram</label><input type="text" name="tg_username" placeholder="@username"></div>
+</div>
+
+<div class="field"><label>Telegram ID — javob olish uchun</label><input type="text" name="tg_id" placeholder="123456789"></div>
+
+<label style="display:flex;align-items:center;gap:10px;margin:18px 0;cursor:pointer"><input type="checkbox" name="rozilik" checked style="width:18px;height:18px"><span style="font-size:14px;font-weight:600">Ismim ko'rsatilishiga roziman</span></label>
+
+<button class="submit-btn">Yuborish — @brainn_hr ga boradi →</button>
+</form>
+
+<div class="side-note">1. Siz yozasiz → 2. @brainn_hr Telegramiga tushadi → 3. ✅ E'lon / ❌ Rad → 4. Holat saqlanadi. Qayta e'lon qilib bo'lmaydi.</div>
+</div>
+{% endblock %}

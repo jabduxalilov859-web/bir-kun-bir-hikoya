@@ -1,0 +1,87 @@
+{% extends 'base.html' %}{% block content %}
+<style>
+.form-wrap{max-width:780px;margin:0 auto}
+.form-top{margin:24px 0 28px}
+.form-title{font-family:'Instrument Serif',Instrument Serif,serif;font-size:48px;letter-spacing:-1.5px;margin:0;line-height:.9}
+.form-title em{font-style:italic;color:var(--muted);font-weight:400}
+.form-sub{color:var(--muted);font-size:13px;margin-top:8px}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:28px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.full{grid-column:1/-1}
+.label{font-size:11px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
+.input, .select, .textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:14px;transition:.2s;box-sizing:border-box}
+.input:focus,.select:focus,.textarea:focus{outline:none;border-color:var(--text)}
+.textarea{resize:vertical;line-height:1.6;font-family:Merriweather,serif}
+.check-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;margin-bottom:18px}
+.check-row input{width:18px;height:18px}
+.btn-save{width:100%;padding:14px;background:var(--text);color:var(--bg);border:none;border-radius:100px;font-weight:800;font-size:14px;cursor:pointer;transition:.2s}
+.btn-save:hover{opacity:.85;transform:translateY(-1px)}
+.img-preview{height:200px;border-radius:16px;background-size:cover;background-position:center;border:1px solid var(--border);margin-top:10px;display:none}
+.side-note{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.form-title{font-size:36px}}
+</style>
+
+<div class="form-wrap">
+<div class="form-top">
+<h1 class="form-title">{{ 'Tahrirlash' if story else 'Yangi' }} <em>hikoya</em></h1>
+<div class="form-sub">@brainn_hr admin paneli • Rasm majburiy, professional dizayn uchun</div>
+</div>
+
+<div class="form-card">
+<form method="post">
+<div class="grid">
+<div class="full">
+<span class="label">Sarlavha *</span>
+<input class="input" name="title" placeholder="Masalan: Bugungi kunning qadri" value="{{story.title if story else ''}}" required>
+</div>
+
+<div>
+<span class="label">Kategoriya</span>
+<select class="select" name="category">
+{% for c in categories %}
+<option value="{{c}}" {% if story and story.category==c %}selected{% endif %}>{{c}}</option>
+{% endfor %}
+</select>
+</div>
+
+<div>
+<span class="label">Sana</span>
+<input class="input" type="date" name="date" value="{{story.date if story else ''}}">
+</div>
+
+<div class="full">
+<span class="label">Qisqa xulosa (kutubxonada chiqadi)</span>
+<input class="input" name="summary" placeholder="2-3 qatorda hikoyaning mazmuni" value="{{story.summary if story else ''}}">
+</div>
+
+<div class="full">
+<span class="label">Rasm URL * (majburiy - hikoya chiroyli chiqishi uchun)</span>
+<input class="input" id="imgInput" name="image_url" placeholder="https://images.unsplash.com/..." value="{{story.image_url if story and story.image_url else ''}}" required>
+<div class="side-note">Unsplash.com dan rasm linki oling: rasm ustida o'ng tugma → Copy image address</div>
+<div id="imgPrev" class="img-preview"></div>
+</div>
+
+<div class="full">
+<span class="label">To'liq hikoya matni *</span>
+<textarea class="textarea" name="content" rows="14" placeholder="Hikoyani to'liq yozing..." required>{{story.content if story else ''}}</textarea>
+</div>
+</div>
+
+<div class="check-row">
+<input type="checkbox" id="pub" name="is_published" {% if story and story.is_published %}checked{% endif %}>
+<label for="pub" style="font-size:13px;font-weight:700">Darhol e'lon qilish (kutubxonada chiqadi)</label>
+</div>
+
+<button class="btn-save">Saqlash → E'lon qilish</button>
+</form>
+</div>
+</div>
+
+<script>
+const inp=document.getElementById('imgInput');
+const prev=document.getElementById('imgPrev');
+function updatePrev(){const v=inp.value.trim();if(v.startsWith('http')){prev.style.backgroundImage=`url('${v}')`;prev.style.display='block';}else{prev.style.display='none';}}
+inp.addEventListener('input',updatePrev);
+updatePrev();
+</script>
+{% endblock %}
