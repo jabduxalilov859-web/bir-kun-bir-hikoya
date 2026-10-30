@@ -78,7 +78,7 @@ def yuborish():
         return redirect(url_for('yuborish'))
     return render_template('yuborish.html')
 
-@app.route('/brainn-hr-admin-2026')
+@app.route('/brainn-hr-admin-2026', methods=['GET','POST'])
 @app.route('/admin/login', methods=['GET','POST'])
 def admin_login():
     if request.method == 'POST':
