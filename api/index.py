@@ -1,7 +1,6 @@
 import os
 import sys
 
-# Yo'lni sozlash
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
@@ -19,7 +18,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 try:
     from models import db, Story, Submission, User
     db.init_app(app)
-    
     with app.app_context():
         db.create_all()
         if Story.query.count() == 0:
@@ -119,7 +117,6 @@ def admin_dashboard():
     except Exception as e:
         return f"Admin xato: {e}"
 
-# >>> MUHIM - RAD / E'LON QILISH ROUTELARI - MANA SHU YETISHMAYOTGAN EDI <<<
 @app.route('/admin/submission/<int:id>/<action>')
 def admin_sub_action(id, action):
     if not session.get('is_admin'):
@@ -127,7 +124,6 @@ def admin_sub_action(id, action):
     try:
         sub = Submission.query.get_or_404(id)
         if action == 'approve' or action == 'elon':
-            # Allaqachon bormi tekshirish
             exists = Story.query.filter_by(content=sub.content).first()
             if not exists:
                 new_story = Story(
@@ -167,6 +163,67 @@ def admin_delete(id):
 def admin_logout():
     session.pop('is_admin', None)
     return redirect('/')
+
+# >>> YANGI - 3 TA TUGMA UCHUN <<<
+@app.route('/admin/hikoyalar')
+def admin_hikoyalar():
+    if not session.get('is_admin'):
+        return redirect(url_for('admin_login'))
+    try:
+        stories = Story.query.order_by(Story.id.desc()).all()
+        return render_template('admin_hikoyalar.html', stories=stories, categories=CATEGORIES)
+    except Exception as e:
+        return f"Xato: {e} - <a href='/brainn-hr-admin-2026/dashboard'>Orqaga</a>"
+
+@app.route('/admin/hikoya/add', methods=['GET','POST'])
+def admin_add():
+    if not session.get('is_admin'):
+        return redirect(url_for('admin_login'))
+    if request.method == 'POST':
+        try:
+            s = Story(
+                title=request.form.get('title'),
+                content=request.form.get('content'),
+                summary=request.form.get('summary') or request.form.get('content', '')[:150],
+                category=request.form.get('category') or "hayotiy saboqlar",
+                image_url=request.form.get('image_url') or "https://images.unsplash.com/photo-1501504905252-473cbee65f87?w=800",
+                date=datetime.strptime(request.form.get('date'), "%Y-%m-%d").date() if request.form.get('date') else date.today(),
+                is_published=bool(request.form.get('is_published')),
+                publish_at=datetime.now()
+            )
+            db.session.add(s)
+            db.session.commit()
+            flash("Hikoya qo'shildi!", "success")
+            return redirect('/admin/hikoyalar')
+        except Exception as e:
+            print(f"Add xato: {e}")
+            flash(f"Xato: {e}", "error")
+    return render_template('admin_hikoya_form.html', categories=CATEGORIES, story=None)
+
+@app.route('/admin/hikoya/<int:id>/edit', methods=['GET','POST'])
+def admin_edit(id):
+    if not session.get('is_admin'):
+        return redirect(url_for('admin_login'))
+    story = Story.query.get_or_404(id)
+    if request.method == 'POST':
+        try:
+            story.title = request.form.get('title')
+            story.content = request.form.get('content')
+            story.summary = request.form.get('summary')
+            story.category = request.form.get('category')
+            story.image_url = request.form.get('image_url')
+            story.is_published = bool(request.form.get('is_published'))
+            if request.form.get('date'):
+                try:
+                    story.date = datetime.strptime(request.form.get('date'), "%Y-%m-%d").date()
+                except:
+                    pass
+            db.session.commit()
+            flash("Yangilandi!", "success")
+            return redirect('/admin/hikoyalar')
+        except Exception as e:
+            print(f"Edit xato: {e}")
+    return render_template('admin_hikoya_form.html', story=story, categories=CATEGORIES)
 
 @app.route('/api/init')
 def init_db():
