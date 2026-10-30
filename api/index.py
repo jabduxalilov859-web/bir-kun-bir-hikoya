@@ -79,9 +79,35 @@ def yuborish():
         return redirect(url_for('yuborish'))
     return render_template('yuborish.html')
 
+# >>> TO'G'IRLANGAN - SEVIMLILAR 404 YO'QOLADI <<<
 @app.route('/sevimlilar')
+@app.route('/sevimli')
+@app.route('/sevimlilarim')
+@app.route('/favorites')
 def sevimlilar():
-    return render_template('sevimlilar.html')
+    try:
+        return render_template('sevimlilar.html')
+    except Exception as e:
+        # Template bo'lmasa ham 404 chiqmasligi uchun fallback
+        return """
+        <html><head><title>Sevimlilar</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body{font-family:sans-serif;text-align:center;padding:20px;background:#f5f5f5;margin:0}
+            .box{background:white;padding:40px;border-radius:20px;max-width:500px;margin:40px auto;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+            a{background:black;color:white;padding:12px 24px;border-radius:30px;text-decoration:none;display:inline-block;margin:10px}
+            a.sec{background:#eee;color:black}
+        </style></head>
+        <body>
+            <div class="box">
+                <h1>❤️ Sevimlilar</h1>
+                <p>Sevimli hikoyalaringiz bu yerda saqlanadi!</p>
+                <p style="color:gray;font-size:14px;">Hozircha bo'sh - hikoyalarga yurakcha bosing!</p>
+                <a href="/kutubxona">Kutubxonaga o'tish</a><br>
+                <a class="sec" href="/">Bosh sahifa</a>
+            </div>
+        </body></html>
+        """
 
 @app.route('/loyiha-haqida')
 def haqida():
@@ -164,7 +190,6 @@ def admin_logout():
     session.pop('is_admin', None)
     return redirect('/')
 
-# >>> YANGI - 3 TA TUGMA UCHUN <<<
 @app.route('/admin/hikoyalar')
 def admin_hikoyalar():
     if not session.get('is_admin'):
